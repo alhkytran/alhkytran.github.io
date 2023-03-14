@@ -1,0 +1,6 @@
+title: AlhKytran's BLog
+author: AlhKytran
+description: >- # this means to ignore newlines until "baseurl:"
+    This blog is created to learn and strengthen knowledge
+
+remote_theme: alhkytran/minima
