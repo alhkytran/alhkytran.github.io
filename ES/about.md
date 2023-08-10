@@ -12,4 +12,4 @@ La creación de este blog ha sido incentivado por dos personas a las que consult
 
 Si quieres contactar conmigo puedes hacerlo a través de...
 
-[back](./)
+[home](../)

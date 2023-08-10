@@ -12,4 +12,4 @@ This blog was created incentivized about two people, those i ask every day about
 
 If you want contat with me, you could use by ...
 
-[back](./)
+[home](../)
