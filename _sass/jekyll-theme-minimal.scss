@@ -29,11 +29,11 @@ h1 {
 }
 
 h2 {
-  color:#393939;
+  color:#06d026;
 }
 
 h3, h4, h5, h6 {
-  color:#494949;
+  color:#06c926;
 }
 
 a {
@@ -58,7 +58,7 @@ a:hover small {
 }
 
 .wrapper {
-  width:860px;
+  width:1700px;
   margin:0 auto;
 }
 
@@ -138,24 +138,30 @@ kbd {
 header {
   width:270px;
   float:left;
-  position:fixed;
+ /* position:fixed;*/
   -webkit-font-smoothing:subpixel-antialiased;
+}
+.linker{
+  width:60px;
+  height:21px;
+  border-radius:5px 5px 5px 5px;
+  background-color: #ffffff;
 }
 
 ul.downloads {
   list-style:none;
-  height:40px;
+  height:22px;
   padding:0;
   background: #f4f4f4;
   border-radius:5px;
   border:1px solid #e0e0e0;
-  width:80px;
+  width: 20%;
 }
 
 .downloads li {
-  width:89px;
+  width:50%;
   float:left;
-  height:40px;
+  height:100%;
 }
 
 .downloads li:first-child a {
@@ -173,7 +179,8 @@ ul.downloads {
   display:block;
   text-align:center;
   padding-top:6px;
-  height:34px;
+  height:100%;
+  width:50%;
 }
 
 .downloads a:hover, .downloads a:focus {
@@ -192,7 +199,7 @@ strong {
 
 .downloads li + li + li {
   border-right:none;
-  width:89px;
+  width:100%;
 }
 
 .downloads a strong {
@@ -201,9 +208,10 @@ strong {
 }
 
 section {
-  width:500px;
+  width:1000px;
   float:right;
   padding-bottom:50px;
+  padding-right:350px;
 }
 
 small {
