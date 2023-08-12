@@ -1,0 +1,25 @@
+--
+layout: default
+---
+ {%- if site.posts.size > 0 -%}
+    <ul class="post-list">
+        <h2 class="post-list-heading"><b>{{ page.list_title | default: "Posts" }}</b></h2>
+      {%- for post in site.posts -%}
+        {%- if post.tag != "aboutme" -%}
+          {%- if page.language == post.language -%}
+      <li>
+          <a class="post-link" href="{{ post.url | relative_url }}">
+            {{ post.title | escape }}
+          </a>
+        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+        <span class="post-meta">{{ post.date | date: date_format }}</span>
+        {%- if site.show_excerpts -%}
+          {{ post.excerpt }}
+        {%- endif -%}
+      </li>
+        {%- endif -%}  <!-- if de page.language solo mostrará los del idioma seleccionado -->
+        {%- endif -%}  <!-- if de post.tag para quitar el aboutme -->
+      {%- endfor -%}
+    </ul>
+
+
