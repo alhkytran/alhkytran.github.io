@@ -2,6 +2,7 @@
 layout: default
 language: en
 ---
+<div style="width: 100%;text-align: right;"><a href="javascript:history.back()"><- back</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="https://alhkytran.github.io">home</a></div>
 
   {% for post in site.posts %}
 	{%- if page.language == post.language -%}
