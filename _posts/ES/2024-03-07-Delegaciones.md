@@ -22,9 +22,11 @@ tags: [ "Red Team", "AD", "Delegaciones"]
 # Kerberos: Delegaciones
 
 1. ### Introducción
-Las delegaciones es una caracterisitca que tienen los entornos de directorio activo de windows, su implementacion tiene la funcion de que un servicio pueda realizar acciones en nombre de un usuario que se halla autenticado en dicho servicio. Por ejemplo, si un servidor web con autenticación, *Kerberos*, tiene una funcionalidad de subida de fichero, la cual se realiza en un servidor de ficheros, para poder hacer que el servicio web pueda realizar acciones en nombre del usuario autenticado, en el servidor de ficheros, utiliza las delegaciones de windows.
-
-				![Image Not Found!](/assets/img/delegacion.png)
+Las delegaciones es una caracterisitca que tienen los entornos de directorio activo de windows, su implementacion tiene la funcion de que un servicio pueda realizar acciones en nombre de un usuario que se halla autenticado en dicho servicio. Por ejemplo, si un servidor web con autenticación, *Kerberos*, tiene una funcionalidad de subida de fichero, la cual se realiza en un servidor de ficheros, para poder hacer que el servicio web pueda realizar acciones en nombre del usuario autenticado, en el servidor de ficheros, utiliza las delegaciones de windows.    
+ 
+<p align="center">
+   <img src="/assets/img/delegacion.png">
+</p>
 
  
 Una mala configuración de esta caracteristica puede hacer que un ususario pueda realizar acciones en nombre de otros usuarios sin el consentimiento de estos mismos. Existen tres tipos de Abusos de dicha cualidad. **Unconstrained delegation**, **Constrained delegation**, **Resource- base constrained delegation(RBCD)**
@@ -37,27 +39,35 @@ En este caso la delegación permite que el usuairo pueda impersonar a cualquier 
 
 Esto es debido a el servicio que pose la caracteristica *SeEnableDelegation* activa, que se consigue activando la opcion *Confiar en este equipo para la delegación a cualquier sercicio (solo Kerberos)*
 
-				![Image Not Found!](/assets/img/SeEnableDelegation.png)
+<p align="center">
+   <img src="/assets/img/SeEnableDelegation.png">
+</p>
 
 
 Esto modifica el *userAccountControl* y añade la opción *TrustedForDelegation* que permite aprovecharnos de esta delegación.
 
-				![Image Not Found!](/assets/img/TrustedForDelegation.png)
+<p align="center">
+   <img src="/assets/img/TrustedForDelegation.png">
+</p>
 
-	1. #### Como detectar la caracteristica
+
+
+  1. #### Como detectar la caracteristica
 Para detectar la vulnerabilidad mediante ldap search necesitamos, y debemos filtrar por maquinas y por el valor *524288* en el *userAccountControl*. Un ejemplo de peticion sería.
 `ldapsearch -v -x -D "User@brain.body" -w contraseña -b "DC=brain,DC=body" -H "ldap://dc01.brain.body" "(&(objectCategory=computer)(userAccountControl:1.2.840.113556.1.4.803:=524288))"`
 
 A lo que aparecerá una lista con las maquinas que tienen activadas esta funcionalidad
 
-				![Image Not Found!](/assets/img/Uncosldapsearch.png)
+<p align="center">
+   <img src="/assets/img/Uncosldapsearch.png">
+</p>
 
-	2. #### Como abusar de Unconstrained Delegation
+  2. #### Como abusar de Unconstrained Delegation
 
 
 3. ### Constrained delegation
 4. ### Resource-based constrained delegation 
-	1. ### RBCD sin SPN
+  1. ### RBCD sin SPN
 
 5. ### Posibles remediaciones
 
