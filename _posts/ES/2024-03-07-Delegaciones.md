@@ -11,11 +11,10 @@ tags: [ "Red Team", "AD", "Delegaciones"]
 1. [Unconstrained delegation](#unconstrained-delegation)
 	1. [Como detectar la caracteristica.](#como-detectar-la-caracteristica)
 	2. [Como abusar de Unconstrained Delegation](#como-abusar-de-unconstrained-delegation)
-	3. [Recomendaciones de mitigacion](#recomendaciones-para-mitigar-el-problema)
 2. [Constrained delegation](#constrained-delegation)
 3. [Resource-based constrained delegations (RBCD)](#resource-based-constrained-delegation)
 	1. [RBCD sin posibilidad de usar *ServicePrincipalName* (SPN)](#rbcd-sin-spn)
-4. [Posibles remediaciones](#posibles-remediaciones)
+4. [Posibles mitigaciones](#posibles-mitigaciones)
 
 ---
 
@@ -52,7 +51,7 @@ Esto modifica el *userAccountControl* y añade la opción *TrustedForDelegation*
 
 
 
-  1. ### Como detectar la característica
+   1. ### Como detectar la característica
 
 Para detectar la vulnerabilidad mediante ldap search necesitamos, y debemos filtrar por maquinas y por el valor *524288* en el *userAccountControl*. Un ejemplo de petición sería.
 `ldapsearch -v -x -D "User@brain.body" -w contraseña -b "DC=brain,DC=body" -H "ldap://dc01.brain.body" "(&(objectCategory=computer)(userAccountControl:1.2.840.113556.1.4.803:=524288))"`
@@ -70,7 +69,7 @@ Impacket tine la tool `findDelegation` que nos muestra todos las delegaciones en
 </p>
 
 
-  2. ### Como abusar de Unconstrained Delegation
+   2. ### Como abusar de Unconstrained Delegation
   
 En nuestro caso, vemos que el equipo con nombre `WINDOWS10` tiene el el atributo `userAccounControl` con el valor `524288` como vimos con el comando anterior de `ldapsearch`.
 
@@ -99,24 +98,24 @@ Con esto ya tendremos permisos para  hacer acciones sobre el dc `10.10.10.33` en
    <img src="/assets/img/dcdir.png">
 </p>
 
-  3. ### Recomendaciones para mitigar el problema
+   3. ### Recomendaciones para mitigar el problema
+
+
+
+2. ## Constrained delegation
+3. ## Resource-based constrained delegation 
+	1. ### RBCD sin SPN
+4. ## Posibles mitigaciones
 
 Para evitar ser objetivo de este ataque es importante deshabilitar las delegaciones siempre que sea posible, en caso de que sea necesario seria recomendable revisar que usuarios poseen permisos para realizar estas delegaciones.
 
-Otra medida es habilitar la opción `La cuenta es importante y no se puede delegar`para las cuentas que tienen privilegios elevados
+Otra medida es habilitar la opción `La cuenta es importante y no se puede delegar` para las cuentas que tienen privilegios elevados
 
 <p align="center">
    <img src="/assets/img/importante.png">
 </p>
 
 
-
-
-2. ## Constrained delegation
-3. ## Resource-based constrained delegation 
-  1. ### RBCD sin SPN
-
-4. ## Posibles remediaciones
 
 ---
 

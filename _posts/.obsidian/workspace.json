@@ -1,62 +1,39 @@
 {
   "main": {
-    "id": "463ecc916179eb60",
+    "id": "89a435ccc9d7a5ce",
     "type": "split",
     "children": [
       {
-        "id": "9bbe41f5a90261d4",
+        "id": "fd61476e822f7587",
         "type": "tabs",
         "children": [
           {
-            "id": "c7162dbe6bef0cb1",
+            "id": "bb7e717194ab3ae6",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "2023-08-13-Enumeracion.md",
+                "file": "ES/2024-03-07-Delegaciones.md",
                 "mode": "source",
                 "source": false
-              }
-            }
-          },
-          {
-            "id": "fbf7adf4b686f8b5",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "2024-03-07-Delegaciones.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "0e7eaf2329672f09",
-            "type": "leaf",
-            "state": {
-              "type": "release-notes",
-              "state": {
-                "currentVersion": "1.5.8"
               }
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
   },
   "left": {
-    "id": "35a92dd357e7232d",
+    "id": "7a0cde4ff204b10d",
     "type": "split",
     "children": [
       {
-        "id": "4c95f33d5fea3923",
+        "id": "6c04f3da2538cbbf",
         "type": "tabs",
         "children": [
           {
-            "id": "0fbb23dc818c8aea",
+            "id": "64fc9a9e10fdab83",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -66,7 +43,7 @@
             }
           },
           {
-            "id": "94a9c814443d4565",
+            "id": "0145115edc326910",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -81,7 +58,7 @@
             }
           },
           {
-            "id": "0ce3a34933d1f644",
+            "id": "ac228c2ec0b6f2a5",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -95,20 +72,20 @@
     "width": 300
   },
   "right": {
-    "id": "b311925abfa821c6",
+    "id": "b78b1d1ef56c004b",
     "type": "split",
     "children": [
       {
-        "id": "7d7d6ef5430c5b26",
+        "id": "93e9f5f2e0153200",
         "type": "tabs",
         "children": [
           {
-            "id": "4d1bb8f9b43b1b7f",
+            "id": "ca3807bc2bed888b",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "2024-03-07-Delegaciones.md",
+                "file": "ES/2024-03-07-Delegaciones.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -120,19 +97,19 @@
             }
           },
           {
-            "id": "fea11dad5ddf0ef6",
+            "id": "50f9d96bc7ef69be",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "2024-03-07-Delegaciones.md",
+                "file": "ES/2024-03-07-Delegaciones.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
             }
           },
           {
-            "id": "b9c4e6f3028e6bbf",
+            "id": "0687db85aa57c651",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -143,12 +120,12 @@
             }
           },
           {
-            "id": "69a66788f1012bba",
+            "id": "667f5c1530005b2a",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
-                "file": "2024-03-07-Delegaciones.md"
+                "file": "ES/2024-03-07-Delegaciones.md"
               }
             }
           }
@@ -169,11 +146,6 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "0e7eaf2329672f09",
-  "lastOpenFiles": [
-    "().md",
-    "2024-03-07-Delegaciones.md",
-    "2023-08-13-Enumeracion.md",
-    "aaa.md"
-  ]
+  "active": "bb7e717194ab3ae6",
+  "lastOpenFiles": []
 }
