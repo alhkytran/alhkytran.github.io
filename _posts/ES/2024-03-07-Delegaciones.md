@@ -12,7 +12,7 @@ tags: [ "Red Team", "AD", "Delegaciones"]
 	1. [Como detectar la caracteristica.](#como-detectar-la-caracteristica)
 	2. [Como abusar de Unconstrained Delegation](#como-abusar-de-unconstrained-delegation)
 2. [Constrained delegation](#constrained-delegation)
-	1. [Como detectar constrained delegation](#como-detectar-constrained-delegation)
+	1. [Como detectar constrained delegation](#como-detectar-la-característica-constrained-delegation)
 	2. [Como abusar de Constrained Delegation](#como-abusar-de-constrained-delegation)
 4. [Resource-based constrained delegations (RBCD)](#resource-based-constrained-delegation)
 	1. [RBCD sin posibilidad de usar *ServicePrincipalName* (SPN)](#rbcd-sin-spn)
@@ -22,7 +22,7 @@ tags: [ "Red Team", "AD", "Delegaciones"]
 
 # Kerberos: Delegaciones
 
-Las delegaciones es una caracterisitca que tienen los entornos de directorio activo de windows, su implementacion tiene la funcion de que un servicio pueda realizar acciones en nombre de un usuario que se halla autenticado en dicho servicio. Por ejemplo, si un servidor web con autenticación, *Kerberos*, tiene una funcionalidad de subida de fichero, la cual se realiza en un servidor de ficheros, para poder hacer que el servicio web pueda realizar acciones en nombre del usuario autenticado, en el servidor de ficheros, utiliza las delegaciones de windows.    
+Las delegaciones es una característica que tienen los entornos de directorio activo de windows, su implementación tiene la función de que un servicio pueda realizar acciones en nombre de un usuario que se halla autenticado en dicho servicio. Por ejemplo, si un servidor web con autenticación, *Kerberos*, tiene una funcionalidad de subida de fichero, la cual se realiza en un servidor de ficheros, para poder hacer que el servicio web pueda realizar acciones en nombre del usuario autenticado, en el servidor de ficheros, utiliza las delegaciones de windows.    
  
 <p align="center">
    <img src="/assets/img/delegacion.png">
@@ -36,7 +36,7 @@ Una mala configuración de esta característica puede hacer que un usuario pueda
 
 1. ## Unconstrained delegation
 
-En este caso la delegación permite que el usuario pueda impersonar a cualquier usuario que haya logueado en el servicio, esto es por que se almacena una copia del TGT al realizar la autenticación, esto permite que puedan generarse TGS en su nombre para ser utilizados en otros servios, por lo que si se consigue realizar con exito, y existe una copia del TGT de un administrador de dominio en el equipo podría utilizarse para realizar acciones como *DCsync* en nombre de dicho administrador de dominio.
+En este caso la delegación permite que el usuario pueda impersonar a cualquier usuario que haya logueado en el servicio, esto es por que se almacena una copia del TGT al realizar la autenticación, esto permite que puedan generarse TGS en su nombre para ser utilizados en otros servios, por lo que si se consigue realizar con éxito, y existe una copia del TGT de un administrador de dominio en el equipo podría utilizarse para realizar acciones como *DCsync* en nombre de dicho administrador de dominio.
 
 Esto es debido a el servicio que pose la característica *SeEnableDelegation* activa, que se consigue activando la opción *Confiar en este equipo para la delegación a cualquier servicio (solo Kerberos)*
 
@@ -109,12 +109,13 @@ Esta delegación es necesario tener una cuneta de usuario o cuenta maquina, comp
 Además se necesita una cuenta conq la opción de `confiar en este equipo para la delegación sólo a los servicios especificados`, dependiendo de los servicios que tenga delegado se podrán realizar diferentes acciones.
 
 Aquí una lista de algunos de los servicios y ejemplos de acciones que podría realizar un usuario con dichos permisos:
-- cifs:
-- host:
-- ldap:
-- http:
-- time:
-- wmi:
+*Work in pogress*
+- cifs: Permite realizar conexiones por smb, pudiendo, incluso, realizar ataques como secretdump
+- host: Permite realizar
+- ldap: Permite realizar consultas ldap y modificaciones sobre el Directorio activo, como modificar el valor del campo `msds-Credential-Links`
+- http: Permite realizar conexiones por http
+- time: Permite realizar 
+- wmi: Permite realizar conexiones por wmi
 
 Con esto podemos impersonar a cualquier usuario, incluido a los administradores de dominio, dentro de la maquina *vulnerable*
 
@@ -126,7 +127,11 @@ Para detectar la vulnerabilidad mediante ldap search necesitamos, primero conoce
 ```
 
 <p align="center">
-   <img src="/assets/img/userconst.png">           <img src="/assets/img/userconstconf.png">
+Sin configurar
+   <img src="/assets/img/userconst.png">         
+   
+Configurado
+   <img src="/assets/img/userconstconf.png">
 </p>
 Luego debemos filtrar por las cuentas con el `msds-allowedtodelegateto` con contenido, para ello podemos realizar la siguiente consulta ldap, en la que veremos al usuarios con la configuración del SPN que luego delegará la maquina victima.
 
@@ -146,7 +151,7 @@ En nuestro caso, vemos que el equipo con nombre `WINDOWS10` tiene el el atributo
 Para poder abusar de esto usaremos `impacket` la tool `getST.py` nos generará un TGS impersonando al usuario `administrador` para el servicio cifs de la maquina `Windows10`
 
 ```command
-getST.py -spn cifs/Windows10.brain.body -impersonate administrador brain.body/constraineduseser:Marzo,24`
+getST.py -spn cifs/Windows10.brain.body -impersonate administrador brain.body/constraineduseser:Marzo,24
 ```
 
 Después solo habrá que utilizar el ticket generado para impersonar el usuario, con el servicio `cifs` podremos, por ejemplo, listar la maquina como si fuéramos el administrador del dominio
@@ -171,8 +176,15 @@ ldapsearch -v -x -D "User@brain.body" -w contraseña -b "DC=brain,DC=body" -H "l
 ```
 
 
-4. ## Resource-based constrained delegation 
-	1. ### RBCD sin SPN
+4. ## Resource-based constrained delegation como-detectar-constrained-delegation
+
+*Work in progress*
+
+1. ### RBCD sin SPN
+
+*Work in progress*
+
+
 5. ## Posibles mitigaciones
 
 Para evitar ser objetivo de este tipo de ataques es importante deshabilitar las delegaciones siempre que sea posible, en caso de que sea necesario seria recomendable revisar que usuarios poseen permisos para realizar estas delegaciones evitando que lo posean usuarios que no vayan a utilizarlo. Además se debería es habilitar la opción `La cuenta es importante y no se puede delegar` para las cuentas que tienen privilegios elevados
