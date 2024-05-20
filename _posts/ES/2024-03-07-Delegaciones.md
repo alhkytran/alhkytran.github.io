@@ -15,8 +15,10 @@ tags: [ "Red Team", "AD", "Delegaciones"]
 	1. [Como detectar constrained delegation](#como-detectar-la-característica-constrained-delegation)
 	2. [Como abusar de Constrained Delegation](#como-abusar-de-constrained-delegation)
 4. [Resource-based constrained delegations (RBCD)](#resource-based-constrained-delegation)
-	1. [RBCD sin posibilidad de usar *ServicePrincipalName* (SPN)](#rbcd-sin-spn)
-5. [Posibles mitigaciones](#posibles-mitigaciones)
+	1. [Como detectar constrained delegation](#como-detectar-la-característica-rbcd)
+	2. [Abusar RBCD con permisos para crear maquinas o cuenta con SPN](#abusar-rbcd-con-permisos-para-crear-maquinas)
+	3. [Abusar RBCD sin SPN ni permisos para crea maquinas](#abusar-rbcd-sin-spn-ni-permisos-para-crea-maquinas)
+6. [Posibles mitigaciones](#posibles-mitigaciones)
 
 ---
 
@@ -109,13 +111,11 @@ Esta delegación es necesario tener una cuneta de usuario o cuenta maquina, comp
 Además se necesita una cuenta conq la opción de `confiar en este equipo para la delegación sólo a los servicios especificados`, dependiendo de los servicios que tenga delegado se podrán realizar diferentes acciones.
 
 Aquí una lista de algunos de los servicios y ejemplos de acciones que podría realizar un usuario con dichos permisos:
-*Work in pogress*
+
 - cifs: Permite realizar conexiones por smb, pudiendo, incluso, realizar ataques como secretdump
-- host: Permite realizar
 - ldap: Permite realizar consultas ldap y modificaciones sobre el Directorio activo, como modificar el valor del campo `msds-Credential-Links`
 - http: Permite realizar conexiones por http
-- time: Permite realizar 
-- wmi: Permite realizar conexiones por wmi
+
 
 Con esto podemos impersonar a cualquier usuario, incluido a los administradores de dominio, dentro de la maquina *vulnerable*
 
@@ -126,13 +126,19 @@ Para detectar la vulnerabilidad mediante ldap search necesitamos, primero conoce
 `ldapsearch -v -x -D "User@brain.body" -w contraseña -b "DC=brain,DC=body" -H "ldap://dc01.brain.body" "(&(objectCategory=user) (sAMAccountName=constraineduseser))"
 ```
 
-<p align="center">
 Sin configurar
+<p align="center">
    <img src="/assets/img/userconst.png">         
-   
+</p>
+
+
 Configurado
+<p align="center">
+
+
    <img src="/assets/img/userconstconf.png">
 </p>
+
 Luego debemos filtrar por las cuentas con el `msds-allowedtodelegateto` con contenido, para ello podemos realizar la siguiente consulta ldap, en la que veremos al usuarios con la configuración del SPN que luego delegará la maquina victima.
 
 ```ladpsearch
@@ -176,10 +182,10 @@ ldapsearch -v -x -D "User@brain.body" -w contraseña -b "DC=brain,DC=body" -H "l
 ```
 
 
-4. ## Resource-based constrained delegation como-detectar-constrained-delegation
+4. ## Resource based constrained delegation 
+En este caso es necesario tener una cuenta con permisos de escritura, como `Gener write` sobre una cuenta maquina, de esta forma podrá escribir el atroibuto `msDS-AllowedToActOnBehalfOfOtherIdentity` de dicha maquina para poder impersonar cualquier usuario del AD dentro de la misma, a no ser que dicho usuario este protegidco contra delegaciones.
 
-Un usuario con permisos de *Generic Write* sobre un equioo o usuario puede modificar el atributo *msDS-AllowedToActOnBehalfOfOtherIdentity* para permitir que una cuenta con SPN impersone un usuario de dominio en esa maquina .
-
+  1. ### Como detectar la característica RBCD
 Con **pywerview** podemos realizar una consulta para ver las acls del dominio referente a un objeto:
 `pywerview get-objectacl -u usuario_pwned -w dominio.local -t dc01.dominio.local --resolve-sids --resolve-guids --name objeto_del_ad
 <p align="center">
@@ -191,10 +197,11 @@ Con esto podemos observar que hay dos usuarios con permisos de escritura sobre l
 <p align="center">
    <img src="/assets/img/SPNs.png">
 </p>
-Al no poseer una cuenta vulnerada con un SPN asociado, existen dos formas de explotar esta configuración, dependera de si tenemos permisos con el usuario vulnerado para crear maquinas o no podemos crear maquinas.
+
+Al no poseer una cuenta vulnerada con un SPN asociado, existen dos formas de explotar esta configuración, dependerá de si tenemos permisos con el usuario vulnerado para crear maquinas o no podemos crear maquinas.
 
 
-1. ### Abusar RBCD con permisos para crear maquinas
+2. ### Abusar RBCD con permisos para crear maquinas
 Nuestro usuario tiene permisos para crear maquinas, por lo que primero que hacemos es crear la maquina que utilizaremos para abusar.
 
 `addcomputer.py -computer-name 'testrbcd' -computer-pass RBCDrules -dc-ip dc01.brain.body brain.body/retard`
@@ -228,7 +235,7 @@ En el paso de generar el TGS, es importante introducir el FQDN completo de la ma
 
 
 
-1. ### RBCD sin SPN ni permisos para crea maquinas
+3. ### Abusar RBCD sin SPN ni permisos para crea maquinas
 En este caso suponemos que no tenemos permisos para crear maquinas, ni una cuenta con spn, en este caso, solo disponemos de la cuenta *userrbcd*, vemos los permisos que tienen el usuario sobre la maquina *Windows10* 
 <p align="center">
    <img src="/assets/img/Permiso.png">
@@ -296,7 +303,9 @@ Después podemos regresar la password normal con smbpasswd y pass the hash
 
 5. ## Posibles mitigation
 
-Para evitar ser objetivo de este tipo de ataques es importante deshabilitar las delegaciones siempre que sea posible, en caso de que sea necesario seria recomendable revisar que usuarios poseen permisos para realizar estas delegaciones evitando que lo posean usuarios que no vayan a utilizarlo. Además se debería es habilitar la opción `La cuenta es importante y no se puede delegar` para las cuentas que tienen privilegios elevados
+Para evitar ser objetivo de este tipo de ataques es importante deshabilitar las delegaciones siempre que sea posible, en caso de que sea necesario seria recomendable revisar que usuarios poseen permisos para realizar estas delegaciones evitando que lo posean usuarios que no vayan a utilizarlo. 
+
+Además se debería es habilitar la opción `La cuenta es importante y no se puede delegar` para las cuentas que tienen privilegios elevados
 
 <p align="center">
    <img src="/assets/img/importante.png">
