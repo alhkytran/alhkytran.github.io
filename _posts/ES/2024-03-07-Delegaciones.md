@@ -230,7 +230,7 @@ Después solo deberemos exportar el ticket ccache generado con *getST* e imperso
 
 **Importante** 
 En el paso de generar el TGS, es importante introducir el FQDN completo de la maquina de lo contrario, aunque generará un TGS este no tendrá los permisos que deseas al no ser el servicio correcto
-<span style="color:red;">cifs/Windows10</span>
+<br><span style="color:red;">cifs/Windows10</span><br>
 <span style="color:green;">cifs/Windows10.brain.body</span>
 
 
