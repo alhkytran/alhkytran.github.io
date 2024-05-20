@@ -189,7 +189,7 @@ En este caso es necesario tener una cuenta con permisos de escritura, como `Gene
 Con **pywerview** podemos realizar una consulta para ver las acls del dominio referente a un objeto:
 `pywerview get-objectacl -u usuario_pwned -w dominio.local -t dc01.dominio.local --resolve-sids --resolve-guids --name objeto_del_ad
 <p align="center">
-   <img src="/assets/img/genericwrite.png">
+   <img src="/assets/img/Genericwrite.png">
 </p>
 Con esto podemos observar que hay dos usuarios con permisos de escritura sobre la maquina *Windows10*, ninguna de estas maquinas pose SPN como puede verse con el comando
 `ldapsearch -v -x -D "usuario@dominio.local" -w Contraseña -b "DC=dominio,DC=local" -H "ldap://dc01.dominio.local" "(&(objectCategory=user)(ServicePrincipalName=*)) | grep sAMAccountName"`
