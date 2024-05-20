@@ -329,4 +329,4 @@ Además se debería es habilitar la opción `La cuenta es importante y no se pue
 
 ## Agradecimientos
 - [Mario Bartolome](https://github.com/MarioBartolome) - *Por la incansable ayuda e inspiración* 
-- [Raul Redondo](https://rayrt.gitlab.io/) - Su ayuda solvento mi agonía con el fqdn en los servicios al generar los TGS...
+- [Raul Redondo](https://rayrt.gitlab.io/) - *Su ayuda solvento mi agonía con el fqdn en los servicios al generar los TGS...*
