@@ -8,43 +8,19 @@
         "type": "tabs",
         "children": [
           {
-            "id": "bb7e717194ab3ae6",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "ES/2024-03-07-Delegaciones.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "d91475336e3e14e7",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "ES/2024-03-07-Delegaciones.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "f308bacdd2fffe5c",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "ES/2024-03-07-Delegaciones.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
             "id": "69ca2f9893b4d66b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "ES/2024-03-07-Delegaciones.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "a1006637cd1abdeb",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -56,7 +32,7 @@
             }
           }
         ],
-        "currentTab": 3
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -183,7 +159,7 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "69ca2f9893b4d66b",
+  "active": "a1006637cd1abdeb",
   "lastOpenFiles": [
     "ES/2023-08-13-Enumeracion.md"
   ]

