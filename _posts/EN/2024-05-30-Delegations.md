@@ -3,7 +3,7 @@ layout: post2
 language: en
 title: "Kerberos: Delegations"
 categories: en Kerberos Delegations
-tags: ["Red Team", "AD", " Delegations"]
+tags: [ "Red Team", "AD", "Delegations" ]
 ---
 
 ## Index
