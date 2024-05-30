@@ -5,19 +5,19 @@ title:  "Kerberos: Delegaciones"
 categories:  es Kerberos Delegaciones
 tags: [ "Red Team", "AD", "Delegaciones"]
 ---
-
+****
 ## Índice
 ---
 1. [Unconstrained delegation](#unconstrained-delegation)
-	1.1. [Como detectar la caracteristica.](#como-detectar-la-caracteristica)
-	1.2. [Como abusar de Unconstrained Delegation](#como-abusar-de-unconstrained-delegation)
+	1. [Como detectar la caracteristica.](#como-detectar-la-caracteristica)
+	2. [Como abusar de Unconstrained Delegation](#como-abusar-de-unconstrained-delegation)
 2. [Constrained delegation](#constrained-delegation)
-	2.1. [Como detectar constrained delegation](#como-detectar-la-característica-constrained-delegation)
-	2.2. [Como abusar de Constrained Delegation](#como-abusar-de-constrained-delegation)
+	1. [Como detectar constrained delegation](#como-detectar-la-característica-constrained-delegation)
+	2. [Como abusar de Constrained Delegation](#como-abusar-de-constrained-delegation)
 3. [Resource-based constrained delegations (RBCD)](#resource-based-constrained-delegation)
-	3.1. [Como detectar constrained delegation](#como-detectar-la-característica-rbcd)
-	3.2. [Abusar RBCD con permisos para crear maquinas o cuenta con SPN](#abusar-rbcd-con-permisos-para-crear-maquinas)
-	3.3. [Abusar RBCD sin SPN ni permisos para crea maquinas](#abusar-rbcd-sin-spn-ni-permisos-para-crea-maquinas)
+	1. [Como detectar resource base constrained delegation](#como-detectar-la-característica-rbcd)
+	2. [Abusar RBCD con permisos para crear maquinas o cuenta con SPN](#abusar-rbcd-con-permisos-para-crear-maquinas)
+	3. [Abusar RBCD sin SPN ni permisos para crea maquinas](#abusar-rbcd-sin-spn-ni-permisos-para-crea-maquinas)
 4. [Posibles mitigaciones](#posibles-mitigaciones)
 
 ---
@@ -56,7 +56,7 @@ Esto modifica el *userAccountControl* y añade la opción *TrustedForDelegation*
 
 ### Como detectar la característica
 
-Para detectar la vulnerabilidad mediante ldap search necesitamos, y debemos filtrar por maquinas y por el valor *524288* en el *userAccountControl*. Un ejemplo de petición sería.
+Para detectar la vulnerabilidad podemos usar ldapsearch, debemos filtrar por maquinas y por el valor *524288* en el *userAccountControl*. Un ejemplo de petición sería.
 ```ladpsearch
 ldapsearch -v -x -D "User@brain.body" -w contraseña -b "DC=brain,DC=body" -H "ldap://dc01.brain.body" "(&(objectCategory=computer)(userAccountControl:1.2.840.113556.1.4.803:=524288))"
 ```
@@ -67,7 +67,7 @@ A lo que aparecerá una lista con las maquinas que tienen activadas esta funcion
    <img src="/assets/img/Uncosldapsearch.png">
 </p>
 
-Impacket tine la tool `findDelegation` que nos muestra todos las delegaciones en el dominio siempre que tengamos credenciales
+Impacket tiene la tool `findDelegation` que nos muestra todos las delegaciones en el dominio siempre que tengamos credenciales
 
 <p align="center">
    <img src="/assets/img/uncdimpa.png">
@@ -120,7 +120,7 @@ Con esto podemos impersonar a cualquier usuario, incluido a los administradores 
 
 ### Como detectar la característica constrained delegation
 
-Para detectar la vulnerabilidad mediante ldap search necesitamos, primero conocer si el usuario que tenemos vulnerado tiene SPN para ello realizaremos una consulta con ldap similar a esta, 
+Para detectar la vulnerabilidad podemos usar `ldapsearch` , primero conocer si el usuario que tenemos vulnerado tiene SPN para ello realizaremos una consulta con ldap similar a esta, 
 ```ladpsearch
 `ldapsearch -v -x -D "User@brain.body" -w contraseña -b "DC=brain,DC=body" -H "ldap://dc01.brain.body" "(&(objectCategory=user) (sAMAccountName=constraineduseser))"
 ```
@@ -182,7 +182,7 @@ ldapsearch -v -x -D "User@brain.body" -w contraseña -b "DC=brain,DC=body" -H "l
 
 
 ## Resource based constrained delegation 
-En este caso es necesario tener una cuenta con permisos de escritura, como `Gener write` sobre una cuenta maquina, de esta forma podrá escribir el atroibuto `msDS-AllowedToActOnBehalfOfOtherIdentity` de dicha maquina para poder impersonar cualquier usuario del AD dentro de la misma, a no ser que dicho usuario este protegidco contra delegaciones.
+En este caso es necesario tener una cuenta con permisos de escritura, como `Generic write` sobre una cuenta maquina, de esta forma podrá escribir el atributo `msDS-AllowedToActOnBehalfOfOtherIdentity` de dicha maquina para poder impersonar cualquier usuario del AD dentro de la misma, a no ser que dicho usuario este protegido contra delegaciones.
 
 ### Como detectar la característica RBCD
 Con **pywerview** podemos realizar una consulta para ver las acls del dominio referente a un objeto:
@@ -254,9 +254,9 @@ Intentamos crear una maquina, pero no tenemos permisos
 
 En este caso debemos realizar la modificación del atributo *AllowedToActOnBehalfOfOtherIdentity* como viene explicado [aqui](https://www.thehacker.recipes/ad/movement/kerberos/delegations/rbcd)
 
-<b>*Hay que tener en cuenta que este caso habrá que modificar la contraseña del usuario por lo que podría quedar innaccesible, y s eusará la tecnica Pass The Ticket*</b>
+<b>Hay que tener en cuenta que este caso habrá que modificar la contraseña del usuario por lo que podría quedar inaccesible, y se usará la técnica Pass The Hash</b>
 
- Esta tecnica consiste en modificar la contraseña del usuario por el hash rc4 utilizado en el *ticketsession key* de un TGT del usuario, para esto necesitaremos un impacket modificado que podemos obtener de:<br>
+ Esta técnica consiste en modificar la contraseña del usuario por el hash rc4 utilizado en el *ticketsession key* de un TGT del usuario, para esto necesitaremos un impacket modificado que podemos obtener de:<br>
 `https://github.com/SecureAuthCorp/impacket`
 
 Lo primero que hacemos es con el usuario, el clual tiene *Generic Write* sobre la maquina, modificamos el valor de *AllowedToActOnBehalfOfOtherIdentity* introduciendo al propio usuario

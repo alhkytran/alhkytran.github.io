@@ -18,8 +18,33 @@
                 "source": false
               }
             }
+          },
+          {
+            "id": "570a8e0682f1cc22",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "EN/2024-06-07-Delegations.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "43ebf8afa64cd5a8",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "EN/2024-06-07-Delegations.md",
+                "mode": "source",
+                "source": false
+              }
+            }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -48,7 +73,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "tag:Delegaciones",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -85,7 +110,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "ES/2024-03-07-Delegaciones.md",
+                "file": "EN/2024-06-07-Delegations.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +127,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "ES/2024-03-07-Delegaciones.md",
+                "file": "EN/2024-06-07-Delegations.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +150,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "ES/2024-03-07-Delegaciones.md"
+                "file": "EN/2024-06-07-Delegations.md"
               }
             }
           }
@@ -146,8 +171,11 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "bce87f6a32e8db22",
+  "active": "43ebf8afa64cd5a8",
   "lastOpenFiles": [
-    "ES/2023-08-13-Enumeracion.md"
+    "ES/2024-03-07-Delegaciones.md",
+    "EN/2024-06-07-Delegations.md",
+    "ES/2023-08-13-Enumeracion.md",
+    "EN/2023-08-13-Enumeration.md"
   ]
 }
