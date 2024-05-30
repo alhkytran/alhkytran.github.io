@@ -4,4 +4,7 @@ Gemfile.lock
 *.gem
 .jekyll-cache
 *.swp
-
+.gitignore
+.obsidian
+.git
+.github
