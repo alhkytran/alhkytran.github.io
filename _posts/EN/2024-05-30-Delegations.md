@@ -37,7 +37,7 @@ A wrong config of this feature could do that an user can do acctions as other us
 
 ---
 
- ## Unconstrained delegation
+## Unconstrained delegation
 
 In this case the delegation allow that one user can impersonate any user who did login in the machine with the service, its possible because, in this case, when an user do the authentication the TGT is store, with this TGT the services can generate a TGS for the service that they need. Then if an attacker could get these TGT could generate the TGS that he want. if get the administrator TGT could do a *DCsync*.
 

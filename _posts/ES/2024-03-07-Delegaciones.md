@@ -5,7 +5,7 @@ title:  "Kerberos: Delegaciones"
 categories:  es Kerberos Delegaciones
 tags: [ "Red Team", "AD", "Delegaciones"]
 ---
-****
+
 ## Índice
 ---
 1. [Unconstrained delegation](#unconstrained-delegation)
@@ -36,7 +36,7 @@ Una mala configuración de esta característica puede hacer que un usuario pueda
 
 ---
 
- ## Unconstrained delegation
+## Unconstrained delegation
 
 En este caso la delegación permite que el usuario pueda impersonar a cualquier usuario que haya logueado en el servicio, esto es por que se almacena una copia del TGT al realizar la autenticación, esto permite que puedan generarse TGS en su nombre para ser utilizados en otros servios, por lo que si se consigue realizar con éxito, y existe una copia del TGT de un administrador de dominio en el equipo podría utilizarse para realizar acciones como *DCsync* en nombre de dicho administrador de dominio.
 
