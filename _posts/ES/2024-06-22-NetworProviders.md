@@ -151,7 +151,7 @@ echo " $(date) $PAM_USER, $(cat -), From: $PAM_RHOST" >> /var/log/archivopasswor
    <img src="/assets/img/NP-script.png">
 </p>
 
-Con `chmod +x` le daremos permisos de ejecución a ese archivo. Luego modificaremos el archivo `/etc/pam.d/common-auth` para añadir la siguiente  linea
+Con `chmod +x` le daremos permisos de ejecución a ese archivo. Luego modificaremos el archivo `/etc/pam.d/common-auth` para añadir la siguiente  linea<br>
 `auth optional pam_exec.so quiet expose_authtok RUTA_DEL_SCRIPT`
 
 Después de esto cuando un usuario se autentique correctamente aparecerá en el log que hemos indicado
@@ -163,14 +163,14 @@ Después de esto cuando un usuario se autentique correctamente aparecerá en el 
 ### Sustituyendo la librería por una modificada
 Otra forma de conseguir credenciales es de una forma mas similar a los network providers de Windows, podemos modificar las librerías utilizadas para gestionar las credenciales y envenenar el proceso de autenticación. En este caso, para su correcto funcionamiento, lo primero que debemos realizar es conocer la versión de pam, para modificar la librería, compilarla y sustituirla, en caso de no usar la misma versión , podría romperse la autenticación del servidor.
 
-Para obtener la versión de PAM en el sistema operativo, podemos realizar, en las distribuciones basadas en debian, el comando 
+Para obtener la versión de PAM en el sistema operativo, podemos realizar, en las distribuciones basadas en debian, el comando <br>
 `dpkg -s libpam0g`
 
 <p align="center">
-   <img src="/assets/img/NP-VersionPAM1.png">
+   <img src="/assets/img/NP-VersionPAM.png">
 </p>
 
-En distros centos o redhat el comando sería
+En distros centos o redhat el comando sería<br>
 `rpm -q pam`
 
 Una vez conocemos la versión de pam, podemos localizarla [aqui](https://github.com/linux-pam/linux-pam/releases) y la descargamos
@@ -179,6 +179,7 @@ Una vez conocemos la versión de pam, podemos localizarla [aqui](https://github.
 </p>
 
 Después debemos modificar el archivo `modules/pam_unix/pam_unix_auth.c` en mi caso voy  a crear un archivo en escritorio de mi usuario con las credenciales de toda la maquina en claro, para ello creare una funcion y añadire la llamada en el proceso de logueo
+<br>
 
  ```c
          D(("user=%s, password=[%s]", name, p));
@@ -219,11 +220,15 @@ void savethings (const char* filename, const char* nombre, const char* passworr)
 </p>
 
 Con esto realizamos un configure y un make para generear las librerias nuevas modificadas, después solo tendremso que copiar la nueva librería `pam_unix.so`  en la ruta del original, lo suyo es hacer una copia de seguridad del original, por si hubiera que volver en algun momento
+<br>
 `cp /lib/x86_64-linux-gnu/security/pam_unix.so /lib/x86_64-linux-gnu/security/pam_unix.so.bk`
-Y luego ya sustituimos la modificada 
+
+<br>
+Y luego ya sustituimos la modificada <br>
 `cp modules/pam_unix/.libs/pam_unix.so /lib/x86_64-linux-gnu/security/pam_unix.so`
 
-Desde ese momento siempre que alguien autentique se creara una entrada en el archivo indicado con las credenciales, como indica en la función creada
+
+<br>Desde ese momento siempre que alguien autentique se creara una entrada en el archivo indicado con las credenciales, como indica en la función creada
 
 <p align="center">
    <img src="/assets/img/NP-miliki.png">
