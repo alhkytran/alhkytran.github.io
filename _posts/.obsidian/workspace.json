@@ -33,7 +33,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "ES/2023-08-13-Enumeracion.md",
+                "file": "ES/2024-06-22-NetworProviders.md",
                 "mode": "source",
                 "source": false
               }
@@ -106,7 +106,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "ES/2023-08-13-Enumeracion.md",
+                "file": "ES/2024-06-22-NetworProviders.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -123,7 +123,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "ES/2023-08-13-Enumeracion.md",
+                "file": "ES/2024-06-22-NetworProviders.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -146,7 +146,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "ES/2023-08-13-Enumeracion.md"
+                "file": "ES/2024-06-22-NetworProviders.md"
               }
             }
           }
@@ -169,11 +169,12 @@
   },
   "active": "43ebf8afa64cd5a8",
   "lastOpenFiles": [
+    "ES/2024-03-07-Delegaciones.md",
+    "ES/2023-08-13-Enumeracion.md",
+    "ES/2024-06-22-NetworProviders.md",
     "EN/2024-05-30-Delegations.md~",
     "EN/2023-08-13-Enumeration.md",
     "EN/2024-05-30-Delegations.md",
-    "ES/2024-03-07-Delegaciones.md",
-    "ES/2023-08-13-Enumeracion.md",
     "EN/2024-06-07-Delegations.md"
   ]
 }
