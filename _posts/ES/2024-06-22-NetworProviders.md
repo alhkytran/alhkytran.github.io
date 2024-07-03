@@ -17,7 +17,7 @@ tags: [ "Red Team", "Credenciales", "Escalada"]
 
 # Introducción
 
-En ocasiones podemos tener una cuenta que es administrador local de una maquina, pero no disponga de mas permisos sobre el dominio, por ejemplo, o necesitemos las credenciales de una cuenta en concreto. Con la cuenta administrador podemos obtener credenciales de los usuarios que logueen en dicha maquina mediante una técnica que consiste en envenenar el proceso de login de una maquina, ya que al iniciar sesión el usuario introduce sus credenciales, es por esto que envenenando este proceso se podría obtener credenciales. Esto puede hacerse tanto en Windows como en Linux, obviamente al ser procesos de autenticación y sistemas  diferentes el proceso diferente también
+En ocasiones podemos tener una cuenta que es administrador local de una maquina, pero no disponga de mas permisos sobre el dominio, por ejemplo, o necesitemos las credenciales de una cuenta en concreto. Con la cuenta administrador podemos obtener credenciales de los usuarios que logueen en dicha maquina mediante una técnica que consiste en envenenar el proceso de login de una maquina, ya que al iniciar sesión el usuario introduce sus credenciales, es por esto que envenenando este proceso se podría obtener credenciales. Esto puede hacerse tanto en Windows como en Linux, obviamente al ser procesos de autenticación y sistemas  diferentes el proceso también será diferente
 
 En Windows se utilizara los *Networks Providers* mientras que en linux, si la autenticación es mediante (PAM) se envenenará el proceso para obtener las credenciales que se introduzcan en dicho proceso.
 
@@ -48,7 +48,7 @@ En nuestro ejemplo tenemos tenemos una cuenta de usuario sin privilegios dentro 
    <img src="/assets/img/mokete_smb.png">
 </p>
 
-Primero deberemos subir el fichero, en este caso lo realizamos en una carpeta controlada, pero podría ser en una del sistema para pasar mas desapercibido y con un nombre menos sospechoso, en este caso es indiferente, lo subimos en *C:\\Users\\Public\\Downloads\\* con el nombre de *NetworkProveder.dll*
+Primero deberemos subir el fichero, en este caso lo realizamos en una carpeta controlada, pero podría ser en una del sistema para pasar mas desapercibido y con un nombre menos sospechoso, en este caso es indiferente, lo subimos en *C:\\Users\\Public\\Downloads\\* con el nombre de *NetworkProvider.dll*
 
 <p align="center">
    <img src="/assets/img/NP-uploadfile.png">
@@ -56,7 +56,7 @@ Primero deberemos subir el fichero, en este caso lo realizamos en una carpeta co
 
 Después usaremos, `reg.py` de *impacket* para modificar el registro de la maquina y hacer que cuando entre en el proceso de logueo utilice nuestra dll modificada.
 
-## <b style="color:red">Importatne</b>
+## <b style="color:red">Importante</b>
 `reg.py` tiene un fallo al escribir en el registro, aunque no da fallo no escribe de forma correcta, para solventar el fallo hay que modificar el archivo `rrp.py` como indica [aqui](https://github.com/fortra/impacket/pull/1295/commits/ef90107a3f733c428450ceb7f30f60ef1c9d54c6) una vez modificado el archivo como indica el link, deberá instalarse impacket nuevamente, para ello es recomendable el uso de `virutalenv` y utilizar `python3 setup.py install` de impacket.
 
 <p align="center">
@@ -68,7 +68,7 @@ Después usaremos, `reg.py` de *impacket* para modificar el registro de la maqui
 </p>
 
 
-Tras arreglar impacket lo primero que debemos hacer es listar los Providers para no para evitar eliminar providers en uso.
+Tras arreglar impacket lo primero que debemos hacer es listar los Providers para evitar eliminar providers en uso.
 
 ```impacket
 reg.py mokete@Windows10.brain.body query -keyName 'HKLM\SYSTEM\CurrentControlSet\Control\NetworkProvider\Order'
