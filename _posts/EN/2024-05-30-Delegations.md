@@ -352,5 +352,5 @@ For deny delegate to importan users, as administrators, you can configurare the 
 
 
 ## Thanks
-- [Mario Bartolome](https://github.com/MarioBartolome) - *For tireless help and inspiration_* 
+- [Mario Bartolome](https://github.com/MarioBartolome) - *For tireless help and inspiration* 
 - [Raul Redondo](https://rayrt.gitlab.io/) - *His help solved my agony with the FQDN in the services to generate the TGS*
