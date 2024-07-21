@@ -1,9 +1,9 @@
 ---
 layout: post2
 language: en
-title:  "Harvesting Credentials"
-categories:  en Credentials
-tags: [ "Red Team", "Credentials", "Escalation"]
+title: "Harvesting Credentials"
+categories: en Credentials
+tags: [ "Red Team", "Credentials", "Escalation" ]
 ---
 
 ## Index
