@@ -1,9 +1,9 @@
 ---
 layout: post2
 language: en
-title: "Kerberos: Delegations"
-categories: en Kerberos Delegations
-tags: [ "Red Team", "AD", "Delegations" ]
+title: "Test"
+categories: en test
+tags: [ "Red Team", "test" ]
 ---
 
 ## Index
